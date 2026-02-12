@@ -1,0 +1,101 @@
+<% layout("layouts/boilerplate") %>
+
+<!-- ===============================
+     Page Header
+=============================== -->
+<div class="max-w-4xl mx-auto mb-8">
+  <h2 class="text-2xl sm:text-3xl font-semibold mb-2">
+    📘 Topics Extracted
+  </h2>
+
+  <p class="text-muted">
+    From file:
+    <span class="text-white font-medium">
+      <%= note.originalFileName %>
+    </span>
+  </p>
+</div>
+
+<!-- ===============================
+     Topics List
+=============================== -->
+<div class="flex justify-center mb-12">
+  <div class="w-full max-w-4xl">
+
+    <% if (topics.length === 0) { %>
+
+      <!-- Empty State -->
+      <div class="
+        bg-soft/60 backdrop-blur
+        border border-white/10
+        rounded-xl
+        p-6
+        text-center
+        text-muted
+      ">
+        No topics found for this document.
+      </div>
+
+    <% } else { %>
+
+      <div class="space-y-4">
+        <% topics.forEach(topic => { %>
+
+          <div class="
+            bg-soft/60 backdrop-blur
+            border border-white/10
+            rounded-xl
+            p-5
+            flex flex-col sm:flex-row
+            sm:items-center
+            sm:justify-between
+            gap-4
+          ">
+
+            <!-- Topic Info -->
+            <div>
+              <h3 class="font-medium text-white">
+                <%= topic.title %>
+              </h3>
+
+              <p class="text-sm text-muted">
+                Importance:
+                <span class="text-gray-300">
+                  <%= topic.importance || "IMP" %>
+                </span>
+              </p>
+            </div>
+
+            <!-- Action -->
+            <a
+              href="/topics/<%= topic._id %>"
+              class="
+                inline-flex items-center gap-2
+                px-4 py-2
+                rounded-md
+                bg-accent text-white text-sm
+                hover:shadow-glow transition
+              "
+            >
+              Open Topic →
+            </a>
+
+          </div>
+
+        <% }) %>
+      </div>
+
+    <% } %>
+
+    <!-- Back -->
+    <div class="mt-8">
+      <a
+        href="/"
+        class="text-sm text-muted hover:text-accent transition"
+      >
+        ⬅ Back to Home
+      </a>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="max-w-3xl mx-auto mb-8">
+  <h2 class="text-2xl sm:text-3xl font-semibold mb-2">
+    <i class="fa-light fa-bullseye"></i> Revizo <span class="text-accent">Smart Notes</span>
+  </h2>
+
+  <p class="text-muted">
+    Upload your PDF notes and let EduAI extract topics intelligently.
+  </p>
+</div>
+
+<div class="flex justify-center">
+  <div class="form-panel w-full max-w-2xl">
+
+    <form action="/notes/upload" method="POST" enctype="multipart/form-data" class="space-y-6">
+
+      <div>
+        <label class="block text-sm text-muted mb-2">Title</label>
+        <input type="text" name="title" required class="form-input">
+      </div>
+
+      <div>
+        <label class="block text-sm text-muted mb-2">Subject</label>
+        <input type="text" name="subject" required class="form-input">
+      </div>
+
+      <div>
+        <label class="block text-sm text-muted mb-2">Unit</label>
+        <input type="text" name="unit" required class="form-input">
+      </div>
+
+      <div>
+        <label class="block text-sm text-muted mb-2">Topic</label>
+        <input type="text" name="topic" required class="form-input">
+      </div>
+
+      <div>
+        <label class="block text-sm text-muted mb-2">PDF File</label>
+        <input type="file" name="pdf" accept="application/pdf" required class="form-input file:rounded-lg">
+      </div>
+
+      <button type="submit" class="form-button text-white">
+        Upload
+      </button>
+
+    </form>
+  </div>
+</div>

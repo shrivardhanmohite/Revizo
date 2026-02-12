@@ -1,0 +1,8 @@
+.env
+.venv
+data/extracted_text/
+ml_service/data/
+temp/
+web/temp/
+__pycache__/
+*.pyc

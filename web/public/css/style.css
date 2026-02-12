@@ -1,0 +1,297 @@
+/* ===============================
+   GLOBAL BACKGROUND
+================================ */
+body {
+  background:
+    radial-gradient(ellipse at top, rgba(124,124,255,0.12), transparent 60%),
+    radial-gradient(ellipse at bottom, rgba(0,0,0,0.8), #020617 70%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle, transparent 55%, rgba(0,0,0,0.7));
+}
+
+/* ===============================
+   DASHBOARD CARDS (GLASS UI)
+================================ */
+.dashboard-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  padding: 20px;
+  transition: all 0.4s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(124,124,255,0.5);
+  box-shadow: 0 20px 40px rgba(124,124,255,0.15);
+}
+
+/* ===============================
+   BOOTSTRAP CAROUSEL (ANIMATION SAFE)
+================================ */
+
+/* Increase overall carousel height */
+#eduaiCarousel {
+  min-height: 520px;
+   width:100%;
+  
+}
+
+/* Control slide image height */
+#eduaiCarousel .carousel-item img {
+  height: 480px;
+ ;
+  object-fit:fill;
+  border-radius: 16px;
+  padding: 0,0,0,0;
+  margin: 0,0,0,0;
+}
+
+/* Ensure smooth slide animation */
+.carousel-item {
+  transition: transform 0.6s ease-in-out;
+}
+
+/* Keep Bootstrap structure intact */
+.carousel-inner {
+  overflow: hidden;
+}
+
+/* ===============================
+   CAROUSEL CAPTIONS (ANIMATED)
+================================ */
+.carousel-caption-custom {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+
+  border-radius: 12px;
+  padding: 14px 18px;
+
+  color: #ffffff;
+
+  opacity: 0;
+  transform: translateY(18px);
+  transition: all 0.5s ease;
+}
+
+.carousel-caption-custom h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.carousel-caption-custom p {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+/* Caption animation only on active slide */
+.carousel-item.active .carousel-caption-custom {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===============================
+   UTILITY FIXES (OPTIONAL)
+================================ */
+.ok {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  height: max-content;
+}
+
+.no {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+/* hide scrollbar (optional but clean) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* caption animation */
+.carousel-caption-custom {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+
+  border-radius: 14px;
+  padding: 14px 18px;
+
+  color: white;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all 0.4s ease;
+}
+
+.snap-center:hover .carousel-caption-custom {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* ===============================
+   CAPTION ANIMATION
+================================ */
+.carousel-caption-custom {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  max-width: 420px;
+
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(8px);
+
+  border-radius: 16px;
+  padding: 18px 22px;
+
+  color: white;
+
+  opacity: 0;
+  transform: translateY(20px);
+  animation: captionFade 4s infinite;
+}
+
+@keyframes captionFade {
+  0% { opacity: 0; transform: translateY(20px); }
+  15% { opacity: 1; transform: translateY(0); }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(20px); }
+}
+/* =====================================
+   SAAS FORM SYSTEM (REVIZO STYLE)
+===================================== */
+
+.form-panel {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.form-section {
+  margin-bottom: 28px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  align-items: center;
+  gap: 20px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.form-row:last-child {
+  border-bottom: none;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  color: white;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #7c7cff;
+  box-shadow: 0 0 0 2px rgba(124,124,255,0.2);
+}
+/* ===============================
+   SaaS Glass Panel Upgrade
+================================ */
+
+.form-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.04),
+    rgba(255,255,255,0.02)
+  );
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 1.75rem;
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  transition: all 0.3s ease;
+}
+
+.form-panel:hover {
+  border-color: rgba(255,255,255,0.15);
+}
+
+/* Inputs */
+
+.form-input {
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 0.75rem 1rem;
+  color: #e5e7eb;
+  transition: all 0.25s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #4f9cff;
+  box-shadow: 0 0 0 3px rgba(79,156,255,0.18);
+  background: rgba(255,255,255,0.05);
+}
+
+/* Textarea */
+
+.form-textarea {
+  border-radius: 16px;
+  resize: none;
+}
+
+/* Button */
+
+.form-button {
+  border-radius: 14px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.875rem;
+  background: linear-gradient(135deg, #3a8bfd, #7a5cff);
+  box-shadow: 0 12px 30px rgba(80,120,255,0.35);
+  transition: all 0.2s ease;
+}
+
+.form-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(80,120,255,0.45);
+}
+.ft{
+  margin-left: 5px;
+}

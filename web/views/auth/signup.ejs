@@ -1,0 +1,69 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="min-h-screen flex items-center justify-center">
+
+  <div class="w-full max-w-md px-6">
+
+    <div class="bg-white rounded-2xl p-10 shadow-xl border border-gray-200">
+
+      <div class="text-center mb-8">
+        <h2 class="text-2xl font-semibold text-gray-900">
+          Create your <span class="text-indigo-600">Revizo</span> account
+        </h2>
+        <p class="text-gray-500 text-sm mt-2">
+          Start your intelligent revision journey
+        </p>
+      </div>
+
+      <% if (error) { %>
+        <div class="bg-red-100 text-red-600 text-sm p-3 rounded-lg mb-6 border border-red-200">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <form method="POST" action="/signup" class="space-y-6">
+
+        <div>
+          <label class="block text-sm text-gray-600 mb-2">Full Name</label>
+          <input type="text" name="name" required
+            class="w-full px-4 py-3 rounded-lg border border-gray-300
+                   focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            placeholder="Your full name" />
+        </div>
+
+        <div>
+          <label class="block text-sm text-gray-600 mb-2">Email</label>
+          <input type="email" name="email" required
+            class="w-full px-4 py-3 rounded-lg border border-gray-300
+                   focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            placeholder="you@example.com" />
+        </div>
+
+        <div>
+          <label class="block text-sm text-gray-600 mb-2">Password</label>
+          <input type="password" name="password" required
+            class="w-full px-4 py-3 rounded-lg border border-gray-300
+                   focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            placeholder="Create a password" />
+        </div>
+
+        <button
+          class="w-full py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700
+                 text-white font-medium transition">
+          Sign up
+        </button>
+
+      </form>
+
+      <p class="text-center text-gray-500 text-sm mt-8">
+        Already have an account?
+        <a href="/login" class="text-indigo-600 hover:underline">
+          Log in
+        </a>
+      </p>
+
+    </div>
+
+  </div>
+
+</div>

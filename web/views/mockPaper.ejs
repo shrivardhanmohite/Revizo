@@ -1,0 +1,41 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="max-w-3xl mx-auto mb-8">
+  <h2 class="text-2xl sm:text-3xl font-semibold mb-2">
+    📝 <span class="text-accent">Mock Question Paper</span>
+  </h2>
+
+  <p class="text-muted">
+    Generate exam-style mock question papers based on high-importance topics.
+  </p>
+</div>
+
+<div class="flex justify-center mb-10">
+  <div class="form-panel w-full max-w-xl text-center">
+
+    <form action="/mock-paper/generate" method="POST">
+      <button type="submit" class="form-button text-white">
+        Generate Mock Paper
+      </button>
+    </form>
+
+  </div>
+</div>
+
+<% if (paper) { %>
+  <div class="flex justify-center mb-10">
+    <div class="form-panel w-full max-w-3xl">
+      <h3 class="text-xl font-medium mb-4">
+        Generated Question Paper
+      </h3>
+
+      <div class="mt-2 p-5 rounded-xl bg-bg/40 border border-white/5 text-sm leading-relaxed whitespace-pre-wrap text-gray-200">
+        <%= paper %>
+      </div>
+    </div>
+  </div>
+<% } %>
+
+<a href="/" class="inline-block text-sm text-muted hover:text-accent transition">
+  ⬅ Back to Home
+</a>

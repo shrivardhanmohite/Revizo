@@ -1,0 +1,90 @@
+<% layout("layouts/boilerplate") %>
+
+<!-- Page Heading -->
+<div class="max-w-4xl mx-auto mb-8">
+  <h2 class="text-2xl sm:text-3xl font-semibold mb-2">
+    📚 Reference PDFs
+  </h2>
+
+  <p class="text-muted">
+    Topic: <span class="text-white font-medium"><%= topic.title %></span>
+  </p>
+</div>
+
+<!-- Content -->
+<div class="flex justify-center">
+  <div class="w-full max-w-3xl">
+
+    <% if (references.length === 0) { %>
+      <!-- Empty State -->
+      <div class="
+        bg-soft/60 backdrop-blur
+        border border-white/10
+        rounded-xl
+        p-6
+        text-center
+        text-muted
+      ">
+        No reference PDFs available for this topic.
+      </div>
+    <% } else { %>
+
+      <!-- Reference List -->
+      <div class="space-y-4">
+        <% references.forEach(pdf => { %>
+
+          <div class="
+            bg-soft/60 backdrop-blur
+            border border-white/10
+            rounded-xl
+            p-5
+            flex flex-col sm:flex-row
+            sm:items-center
+            sm:justify-between
+            gap-4
+          ">
+
+            <!-- PDF Info -->
+            <div>
+              <h3 class="font-medium text-white">
+                <%= pdf.originalFileName %>
+              </h3>
+              <p class="text-sm text-muted">
+                Uploaded on <%= pdf.createdAt.toDateString() %>
+              </p>
+            </div>
+
+            <!-- Action -->
+            <a
+              href="/<%= pdf.storedFilePath %>"
+              target="_blank"
+              class="
+                inline-flex items-center gap-2
+                px-4 py-2
+                rounded-md
+                bg-accent text-white text-sm
+                hover:shadow-glow transition
+              "
+            >
+              📄 Open PDF
+            </a>
+
+          </div>
+
+        <% }) %>
+      </div>
+
+    <% } %>
+
+    <!-- Back -->
+    <div class="mt-8">
+      <a
+        href="/topics/<%= topic._id %>"
+        class="text-sm text-muted hover:text-accent transition"
+      >
+        ⬅ Back to Topic
+      </a>
+    </div>
+
+  </div>
+</div>

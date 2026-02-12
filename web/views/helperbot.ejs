@@ -1,0 +1,85 @@
+<% layout("layouts/boilerplate") %>
+
+<h2 class="text-3xl font-semibold mb-2">
+  🤖 <span class="text-accent">HelperBot</span>
+</h2>
+
+<p class="text-muted mb-8">
+  Ask any academic or general knowledge question
+</p>
+
+<!-- Error -->
+<% if (error) { %>
+  <div class="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+    <%= error %>
+  </div>
+<% } %>
+
+<!-- Chat Window -->
+<div class="form-panel mb-8">
+  <div class="space-y-4 max-h-[450px] overflow-y-auto pr-2">
+
+    <% if (chatHistory && chatHistory.length > 0) { %>
+      <% chatHistory.forEach(msg => { %>
+
+        <div class="flex <%= msg.role === 'user' ? 'justify-end' : 'justify-start' %>">
+          <div class="
+            max-w-[70%] px-4 py-3 rounded-2xl text-sm whitespace-pre-wrap
+            <%= msg.role === 'user'
+              ? 'bg-accent text-white'
+              : 'bg-bg border border-white/10 text-gray-200' %>
+          ">
+            <%= msg.content %>
+          </div>
+        </div>
+
+      <% }) %>
+    <% } else { %>
+      <p class="text-muted text-sm">Start the conversation...</p>
+    <% } %>
+
+  </div>
+</div>
+
+<!-- Ask Form -->
+<div class="form-panel mb-8">
+  <form action="/helperbot/ask" method="POST" class="space-y-5">
+    <textarea
+      name="question"
+      rows="3"
+      placeholder="Type your message..."
+      required
+      class="form-input form-textarea"
+    ></textarea>
+
+    <button type="submit" class="form-button text-white">
+      Send
+    </button>
+  </form>
+</div>
+
+<!-- Email Button -->
+<% if (chatHistory && chatHistory.length > 1) { %>
+  <div class="form-panel mb-10">
+    <form action="/helperbot/email" method="POST" class="flex gap-4">
+      <input
+        type="email"
+        name="email"
+        placeholder="Enter email"
+        required
+        class="form-input flex-1"
+      >
+
+      <button
+        type="submit"
+        class="px-6 py-2 rounded-xl border border-white/10 text-sm hover:border-accent hover:text-accent transition"
+      >
+        📧 Send Last Chat
+      </button>
+    </form>
+  </div>
+<% } %>
+
+<a href="/" class="inline-block text-sm text-muted hover:text-accent transition">
+  ⬅ Back to Home
+</a>

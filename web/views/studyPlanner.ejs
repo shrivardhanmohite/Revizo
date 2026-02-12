@@ -1,0 +1,223 @@
+<% layout("layouts/boilerplate") %>
+
+<!-- ===============================
+     Page Header
+=============================== -->
+<div class="max-w-4xl mx-auto mb-8">
+  <h2 class="text-2xl sm:text-3xl font-semibold mb-2">
+    📅 Study Planner
+  </h2>
+
+  <p class="text-muted">
+    Plan your preparation smartly and track progress topic-wise.
+  </p>
+</div>
+
+<!-- ===============================
+     Exam Date Planner
+=============================== -->
+<div class="flex justify-center mb-10">
+  <div class="w-full max-w-xl bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
+
+    <form method="GET" action="/study-planner" class="space-y-4">
+      <div>
+        <label class="block text-sm text-muted mb-1">
+          Exam Date
+        </label>
+        <input
+          type="date"
+          name="examDate"
+          required
+          class="w-full bg-bg border border-white/10 rounded-md
+                 px-4 py-2 text-gray-200
+                 focus:outline-none focus:ring-2 focus:ring-accent"
+        >
+      </div>
+
+      <button
+        type="submit"
+        class="px-6 py-2 rounded-md bg-accent text-white text-sm
+               hover:shadow-glow transition"
+      >
+        Plan
+      </button>
+    </form>
+
+    <% if (daysLeft !== null) { %>
+      <p class="mt-4 text-sm text-muted">
+        ⏳ Days Remaining:
+        <span class="text-white font-medium"><%= daysLeft %></span>
+      </p>
+    <% } %>
+
+  </div>
+</div>
+
+<!-- ===============================
+     Google Calendar Integration
+=============================== -->
+<div class="flex justify-center mb-12">
+  <div class="w-full max-w-3xl bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
+
+    <h3 class="text-xl font-medium mb-3">
+      🗓 Google Calendar Integration
+    </h3>
+
+    <p class="text-sm text-muted mb-6 leading-relaxed">
+      • VV-IMP topics → 3 hours<br>
+      • Last 3 days → Revision only<br>
+      • Events are color-coded by priority
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Exam Day -->
+      <form action="/calendar/exam" method="POST" class="space-y-3">
+        <label class="block text-sm text-muted">
+          Exam Date
+        </label>
+
+        <input
+          type="date"
+          name="examDate"
+          required
+          class="w-full bg-bg border border-white/10 rounded-md
+                 px-4 py-2 text-gray-200
+                 focus:outline-none focus:ring-2 focus:ring-accent"
+        >
+
+        <button
+          type="submit"
+          class="px-4 py-2 rounded-md bg-accent text-white text-sm
+                 hover:shadow-glow transition"
+        >
+          ➕ Add Exam Day
+        </button>
+      </form>
+
+      <!-- Smart Study Plan -->
+      <form action="/calendar/study-planner" method="POST" class="space-y-3">
+        <label class="block text-sm text-muted">
+          Exam Date
+        </label>
+
+        <input
+          type="date"
+          name="examDate"
+          required
+          class="w-full bg-bg border border-white/10 rounded-md
+                 px-4 py-2 text-gray-200
+                 focus:outline-none focus:ring-2 focus:ring-accent"
+        >
+
+        <label class="block text-sm text-muted">
+          Preferred Study Time
+        </label>
+
+        <select
+          name="preference"
+          class="w-full bg-bg border border-white/10 rounded-md
+                 px-4 py-2 text-gray-200"
+        >
+          <option value="evening">🌙 Evening (7 PM – 9 PM)</option>
+          <option value="morning">☀️ Morning (6 AM – 9 AM)</option>
+        </select>
+
+        <button
+          type="submit"
+          class="px-4 py-2 rounded-md bg-accent text-white text-sm
+                 hover:shadow-glow transition"
+        >
+          📘 Add Smart Study Plan
+        </button>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===============================
+     Analytics Overview
+=============================== -->
+<div class="max-w-4xl mx-auto mb-10">
+  <h3 class="text-xl font-medium mb-4">
+    📊 Checkpoint Overview
+  </h3>
+
+  <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 text-sm">
+    <div class="bg-soft/60 p-4 rounded-lg text-center">Started<br><strong><%= stats.started %></strong></div>
+    <div class="bg-soft/60 p-4 rounded-lg text-center">Basics<br><strong><%= stats.basics %></strong></div>
+    <div class="bg-soft/60 p-4 rounded-lg text-center">Practice<br><strong><%= stats.practice %></strong></div>
+    <div class="bg-soft/60 p-4 rounded-lg text-center">Revision<br><strong><%= stats.revision %></strong></div>
+    <div class="bg-soft/60 p-4 rounded-lg text-center">Ready<br><strong><%= stats.ready %></strong></div>
+  </div>
+</div>
+
+<!-- ===============================
+     Topics List
+=============================== -->
+<div class="max-w-4xl mx-auto mb-12">
+  <h3 class="text-xl font-medium mb-4">
+    📘 Topics
+  </h3>
+
+  <div class="space-y-4">
+    <% topics.forEach(t => { %>
+
+      <div class="bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-5">
+
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3">
+          <h4 class="font-medium text-white">
+            <%= t.title %>
+          </h4>
+          <span class="text-sm text-muted">
+            <%= t.importance || "IMP" %>
+          </span>
+        </div>
+
+        <!-- Stages -->
+        <div class="flex flex-wrap gap-2 text-xs mb-4">
+          <% ["started","basics","practice","revision","ready"].forEach(s => { %>
+            <span class="
+              px-2 py-1 rounded-md
+              <%= t.studyStage === s ? "bg-accent text-white" : "bg-bg text-muted" %>
+            ">
+              <%= s.charAt(0).toUpperCase() + s.slice(1) %>
+            </span>
+          <% }) %>
+        </div>
+
+        <!-- Update Stage -->
+        <form action="/study-planner/update-stage" method="POST" class="flex gap-3">
+          <input type="hidden" name="topicId" value="<%= t._id %>">
+
+          <select
+            name="studyStage"
+            class="bg-bg border border-white/10 rounded-md
+                   px-3 py-2 text-sm text-gray-200"
+          >
+            <option value="started">Started</option>
+            <option value="basics">Basics Clear</option>
+            <option value="practice">Practiced</option>
+            <option value="revision">Revised</option>
+            <option value="ready">Exam Ready</option>
+          </select>
+
+          <button
+            type="submit"
+            class="px-4 py-2 rounded-md bg-accent text-white text-sm
+                   hover:shadow-glow transition"
+          >
+            Update
+          </button>
+        </form>
+
+      </div>
+
+    <% }) %>
+  </div>
+</div>
+
+<a href="/" class="text-sm text-muted hover:text-accent transition">
+  ⬅ Back to Home
+</a>

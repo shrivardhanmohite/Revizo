@@ -1,0 +1,193 @@
+<% layout("layouts/boilerplate") %>
+
+<!-- ===============================
+     Page Header
+=============================== -->
+<div class="max-w-4xl mx-auto mb-8">
+  <h2 class="text-2xl sm:text-3xl font-semibold mb-1">
+    <%= topic.title %>
+  </h2>
+  <p class="text-muted">
+    Topic details, importance tagging, summaries, and references
+  </p>
+</div>
+
+<!-- ===============================
+     Importance + Teacher Comments
+=============================== -->
+<div class="flex justify-center mb-10">
+  <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- Importance -->
+    <div class="bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
+      <h3 class="text-lg font-medium mb-3">⭐ Mark Importance</h3>
+
+      <form action="/topics/<%= topic._id %>/importance" method="POST" class="space-y-4">
+        <select
+          name="importance"
+          class="w-full bg-bg border border-white/10 rounded-md
+                 px-4 py-2 text-gray-200"
+        >
+          <option value="IMP" <%= topic.importance === "IMP" ? "selected" : "" %>>IMP</option>
+          <option value="M-IMP" <%= topic.importance === "M-IMP" ? "selected" : "" %>>M-IMP</option>
+          <option value="V-IMP" <%= topic.importance === "V-IMP" ? "selected" : "" %>>V-IMP</option>
+          <option value="VV-IMP" <%= topic.importance === "VV-IMP" ? "selected" : "" %>>VV-IMP</option>
+        </select>
+
+        <button
+          type="submit"
+          class="px-5 py-2 rounded-md bg-accent text-white text-sm
+                 hover:shadow-glow transition"
+        >
+          Save Importance
+        </button>
+      </form>
+    </div>
+
+    <!-- Teacher Comments -->
+    <div class="bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
+      <h3 class="text-lg font-medium mb-3">🧑‍🏫 Teacher’s Comments</h3>
+
+      <form action="/topics/<%= topic._id %>/comments" method="POST" class="space-y-4">
+        <textarea
+          name="teacherComments"
+          rows="6"
+          placeholder="Enter comments given by teacher during class..."
+          class="w-full bg-bg border border-white/10 rounded-md
+                 px-4 py-2 text-gray-200 resize-none"
+        ><%= topic.teacherComments %></textarea>
+
+        <button
+          type="submit"
+          class="px-5 py-2 rounded-md bg-accent text-white text-sm
+                 hover:shadow-glow transition"
+        >
+          Save Comments
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===============================
+     Original Content
+=============================== -->
+<div class="flex justify-center mb-10">
+  <div class="w-full max-w-4xl bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
+    <h3 class="text-lg font-medium mb-3">📄 Original Content</h3>
+    <p class="text-gray-200 leading-relaxed whitespace-pre-line">
+      <%= topic.content %>
+    </p>
+  </div>
+</div>
+
+<!-- ===============================
+     AI Summarization
+=============================== -->
+<div class="flex justify-center mb-10">
+  <div class="w-full max-w-4xl bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
+
+    <h3 class="text-lg font-medium mb-4">🧠 AI Summary</h3>
+
+    <form
+      action="/topics/<%= topic._id %>/summarize"
+      method="POST"
+      class="flex flex-col sm:flex-row gap-4 items-start sm:items-center"
+    >
+      <label class="flex items-center gap-2 text-sm">
+        <input
+          type="radio"
+          name="studyMode"
+          value="exam"
+          <%= topic.summaryMode !== "daily" ? "checked" : "" %>
+        >
+        Examination
+      </label>
+
+      <label class="flex items-center gap-2 text-sm">
+        <input
+          type="radio"
+          name="studyMode"
+          value="daily"
+          <%= topic.summaryMode === "daily" ? "checked" : "" %>
+        >
+        Daily Study
+      </label>
+
+      <button
+        type="submit"
+        class="px-5 py-2 rounded-md bg-accent text-white text-sm
+               hover:shadow-glow transition"
+      >
+        Generate AI Summary
+      </button>
+    </form>
+
+    <% if (topic.summary) { %>
+      <div class="mt-6 border-t border-white/10 pt-6">
+        <h4 class="font-medium mb-2">
+          📌 AI Summary (<%= topic.summaryMode %>)
+        </h4>
+
+        <pre class="whitespace-pre-wrap text-gray-200 text-sm leading-relaxed">
+<%= topic.summary %>
+        </pre>
+      </div>
+    <% } %>
+
+  </div>
+</div>
+
+<!-- ===============================
+     Email Summary
+=============================== -->
+<% if (topic.summary) { %>
+  <div class="flex justify-center mb-10">
+    <div class="w-full max-w-4xl bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
+
+      <h3 class="text-lg font-medium mb-3">📧 Send Summary via Email</h3>
+
+      <form
+        action="/topics/<%= topic._id %>/email-summary"
+        method="POST"
+        class="flex flex-col sm:flex-row gap-4"
+      >
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter email address"
+          required
+          class="flex-1 bg-bg border border-white/10 rounded-md
+                 px-4 py-2 text-gray-200"
+        >
+
+        <button
+          type="submit"
+          class="px-5 py-2 rounded-md bg-accent text-white text-sm
+                 hover:shadow-glow transition"
+        >
+          Send Summary
+        </button>
+      </form>
+
+    </div>
+  </div>
+<% } %>
+
+<!-- ===============================
+     References
+=============================== -->
+<div class="max-w-4xl mx-auto mb-12">
+  <a
+    href="/topics/<%= topic._id %>/references"
+    class="inline-flex items-center gap-2 text-sm text-muted
+           hover:text-accent transition"
+  >
+    📎 View Reference Pages (Diagrams & Scanned Notes)
+  </a>
+</div>
+
+<a href="/" class="text-sm text-muted hover:text-accent transition">
+  ⬅ Back to Home
+</a>

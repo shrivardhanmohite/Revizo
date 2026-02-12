@@ -1,0 +1,42 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="max-w-3xl mx-auto mb-8">
+  <h2 class="text-2xl sm:text-3xl font-semibold mb-2">
+    📄 PDF Uploaded
+  </h2>
+
+  <p class="text-muted">
+    The uploaded PDF does not contain extractable text.
+  </p>
+</div>
+
+<div class="flex justify-center">
+  <div class="form-panel w-full max-w-xl">
+
+    <p class="text-gray-200 mb-4">
+      <%= message %>
+    </p>
+
+    <p class="text-sm text-muted mb-6">
+      You can still store this PDF for future reference and revision.
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-4">
+
+      <form action="/notes/store-only" method="POST">
+        <input type="hidden" name="pdfPath" value="<%= pdfPath %>">
+        <input type="hidden" name="originalFileName" value="<%= originalFileName %>">
+
+        <button type="submit" class="form-button text-white">
+          Store PDF in Cloud
+        </button>
+      </form>
+
+      <a href="/upload"
+         class="px-6 py-2 rounded-xl border border-white/10 text-sm text-muted hover:border-accent hover:text-accent transition text-center">
+        Cancel
+      </a>
+
+    </div>
+  </div>
+</div>

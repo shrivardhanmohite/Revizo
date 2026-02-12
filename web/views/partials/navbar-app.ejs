@@ -1,0 +1,92 @@
+<nav class="w-full border-b border-white/10 bg-bg sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 md:px-12">
+    <div class="flex items-center justify-between h-16">
+
+      <!-- Left Section -->
+      <div class="flex items-center gap-10">
+
+        <!-- Logo -->
+        <a href="/dashboard"
+           class="flex items-center gap-2 text-xl font-semibold tracking-wide">
+          <i class="fa-solid fa-bullseye text-accent text-lg"></i>
+          <span>Revi<span class="text-accent">zo</span></span>
+        </a>
+
+        <!-- Navigation Links -->
+        <div class="hidden md:flex items-center gap-6 text-sm text-muted">
+
+          <a href="/dashboard"
+             class="flex items-center gap-2 hover:text-white transition">
+            <i class="fa-solid fa-house text-xs"></i>
+            Dashboard
+          </a>
+
+          <a href="/study-planner"
+             class="flex items-center gap-2 hover:text-white transition">
+            <i class="fa-solid fa-calendar-check text-xs"></i>
+            Planner
+          </a>
+
+          <a href="/mock-paper"
+             class="flex items-center gap-2 hover:text-white transition">
+            <i class="fa-solid fa-file-lines text-xs"></i>
+            Mock
+          </a>
+
+          <a href="/helperbot"
+             class="flex items-center gap-2 hover:text-white transition">
+            <i class="fa-solid fa-robot text-xs"></i>
+            HelperBot
+          </a>
+
+          <a href="/analytics"
+             class="flex items-center gap-2 hover:text-white transition">
+            <i class="fa-solid fa-chart-line text-xs"></i>
+            Analytics
+          </a>
+
+        </div>
+
+      </div>
+
+      <!-- Right Section -->
+      <div class="flex items-center gap-6">
+
+        <!-- Search -->
+        <div class="hidden lg:block relative">
+          <input type="text"
+                 placeholder="Search..."
+                 class="bg-soft border border-white/10
+                        px-3 py-1.5 pl-9 rounded-md text-sm
+                        focus:outline-none focus:border-accent transition" />
+          <i class="fa-solid fa-magnifying-glass
+                    absolute left-3 top-1/2 -translate-y-1/2
+                    text-muted text-xs"></i>
+        </div>
+
+        <!-- Notification -->
+        <button class="relative p-2 rounded-md hover:bg-white/10 transition">
+          <i class="fa-regular fa-bell text-muted"></i>
+          <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+
+        <!-- User -->
+        <div class="flex items-center gap-2 text-sm text-muted">
+          <i class="fa-regular fa-circle-user text-lg"></i>
+          <span class="hidden sm:block">
+            <%= user.name %>
+          </span>
+        </div>
+
+        <!-- Logout -->
+        <a href="/logout"
+           class="px-4 py-2 text-sm border border-white/10 rounded-md
+                  hover:border-accent hover:text-accent transition">
+          Logout
+        </a>
+
+      </div>
+
+    </div>
+  </div>
+</nav>

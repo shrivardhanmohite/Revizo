@@ -1,0 +1,178 @@
+<% layout("layouts/boilerplate") %>
+
+<main class="min-h-screen">
+
+  <!-- FULL-BLEED HERO CAROUSEL -->
+  <section
+    class="relative left-1/2 right-1/2 -translate-x-1/2
+           w-screen h-[650px] overflow-hidden">
+
+    <!-- LEFT TRANSPARENT INFO PANEL -->
+    <div
+      class="absolute z-30 left-12 top-1/2 -translate-y-1/2
+             max-w-md p-6 rounded-2xl
+             bg-white/10 backdrop-blur-xl
+             border border-white/20
+             text-white">
+
+      <h1 class="text-4xl font-light leading-tight mb-4">
+        Intelligent study
+        <span class="text-indigo-300 font-medium">made simple</span>
+      </h1>
+
+      <p class="text-sm text-white/80 mb-6">
+        AI-powered notes, smart planners, audio learning and instant
+        doubt solving — all in one platform.
+      </p>
+
+      <div class="flex gap-3">
+        <a href="/dashboard"
+           class="px-5 py-2.5 rounded-lg bg-indigo-500 hover:bg-indigo-600 transition">
+          Start Studying
+        </a>
+
+        <a href="/features"
+           class="px-5 py-2.5 rounded-lg border border-white/30 hover:border-white/60 transition">
+          Explore
+        </a>
+      </div>
+    </div>
+
+    <!-- CAROUSEL TRACK -->
+    <div
+      id="eduaiCarousel"
+      class="flex h-full transition-transform duration-700 ease-in-out relative z-10">
+
+      <!-- Slide 1 -->
+      <div class="min-w-full h-full">
+        <img src="/images/Focused studying in a digital world.png"
+             class="w-full h-full object-cover" />
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="min-w-full h-full">
+        <img src="/images/smart notes.png"
+             class="w-full h-full object-cover" />
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="min-w-full h-full">
+        <img src="/images/OIP.png"
+             class="w-full h-full object-cover" />
+      </div>
+
+      <!-- Slide 4 -->
+      <div class="min-w-full h-full">
+        <img src="/images/ask-questions.png"
+             class="w-full h-full object-cover" />
+      </div>
+
+    </div>
+
+    <!-- GRADIENT FOR READABILITY -->
+    <div
+      class="absolute inset-0 bg-gradient-to-r
+             from-black/70 via-black/30 to-transparent
+             z-20 pointer-events-none">
+    </div>
+
+  </section>
+  <!-- HOW STUDENTS USE EDUAI -->
+<section class="py-32 relative">
+
+  <div class="max-w-6xl mx-auto px-6 text-center">
+
+    <p class="text-white/40 uppercase tracking-widest text-sm mb-6">
+      Built for serious learners
+    </p>
+
+    <h2 class="text-4xl font-light mb-6 text-white">
+      Designed to reduce revision time and
+      <span class="text-indigo-300 font-medium">maximize performance</span>
+    </h2>
+
+    <p class="text-white/60 max-w-2xl mx-auto">
+      EduAI structures preparation with AI-driven analysis,
+      intelligent planning and exam-focused tools.
+    </p>
+
+  </div>
+
+</section>
+<section class="py-32 relative">
+
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="grid md:grid-cols-3 gap-12">
+
+      <div class="p-10 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10">
+        <div class="text-indigo-400 text-3xl mb-6">🎓</div>
+        <h3 class="text-xl font-medium mb-4 text-white">Upload & Analyze</h3>
+        <p class="text-white/70">
+          Convert your notes into structured summaries and key insights.
+        </p>
+      </div>
+
+      <div class="p-10 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10">
+        <div class="text-indigo-400 text-3xl mb-6">🧠</div>
+        <h3 class="text-xl font-medium mb-4 text-white">Plan & Execute</h3>
+        <p class="text-white/70">
+          Generate smart study planners based on syllabus weightage.
+        </p>
+      </div>
+
+      <div class="p-10 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10">
+        <div class="text-indigo-400 text-3xl mb-6">📊</div>
+        <h3 class="text-xl font-medium mb-4 text-white">Track & Improve</h3>
+        <p class="text-white/70">
+          Use analytics to optimize revision strategy.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+<section class="py-32 relative">
+
+  <div class="max-w-4xl mx-auto px-6">
+
+    <div class="p-14 rounded-3xl bg-white/5 backdrop-blur-2xl border border-white/10 text-center">
+
+      <h2 class="text-4xl font-light mb-6 text-white">
+        Your data stays <span class="text-indigo-300 font-medium">private</span>
+      </h2>
+
+      <p class="text-white/70 text-lg">
+        EduAI never uses your uploaded content to train models.
+        Your academic material remains secure.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+</main>
+
+<!-- AUTO ROTATION SCRIPT -->
+<script>
+  const carousel = document.getElementById("eduaiCarousel");
+  const slides = carousel.children;
+  let index = 0;
+
+  setInterval(() => {
+    index = (index + 1) % slides.length;
+    carousel.style.transform = `translateX(-${index * 100}%)`;
+  }, 4000);
+
+  function toggleFAQ(btn) {
+    const content = btn.nextElementSibling;
+    content.classList.toggle("hidden");
+  }
+
+
+</script>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Dynamic Title (Professional Setup) -->
+  <title><%= typeof title !== "undefined" ? title + " | Revizo" : "Revizo - AI Study Platform" %></title>
+
+  <!-- ✅ Correct Favicon Path -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <!-- Optional fallback for older browsers -->
+  <link rel="alternate icon" href="/favicon.ico">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: "#0b0f1a",
+            soft: "#111827",
+            accent: "#7c7cff",
+            muted: "#9ca3af"
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Your Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<%
+  const isAuthPage =
+    currentPath === "/login" ||
+    currentPath === "/signup";
+%>
+
+<body class="<%= isAuthPage ? 'bg-gray-50 text-gray-900' : 'bg-bg text-gray-200' %> transition-colors duration-300">
+
+  <!-- Navbar -->
+  <% if (user) { %>
+    <%- include("../partials/navbar-app") %>
+  <% } else { %>
+    <%- include("../partials/navbar-marketing") %>
+  <% } %>
+
+  <!-- Page Content -->
+  <main class="<%= isAuthPage ? '' : 'max-w-7xl mx-auto px-6 md:px-12 py-12' %>">
+    <%- body %>
+  </main>
+
+  <!-- Footer -->
+  <%- include("../partials/footer.ejs") %>
+
+</body>
+</html>
