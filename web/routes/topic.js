@@ -2,18 +2,35 @@ const express = require("express");
 const router = express.Router();
 const topicController = require("../controllers/topicController");
 const isLoggedIn = require("../middleware/isLoggedIn");
-// ===============================
-// Topic detail page
-// ===============================
-router.get("/:topicId", topicController.showTopic);
-router.get("/:topicId/references", topicController.showReferences);
-router.post("/:topicId/importance", isLoggedIn,topicController.updateImportance);
-router.post("/:topicId/comments",isLoggedIn,topicController.updateComments);
-router.post("/:id/email-summary",isLoggedIn, topicController.emailSummary);
 
 // ===============================
-// Generate AI summary (exam / daily)
+// Show Topic Detail
 // ===============================
-router.post("/:topicId/summarize", topicController.generateSummary);
+router.get("/:topicId", isLoggedIn, topicController.showTopic);
+
+// ===============================
+// Reference Page
+// ===============================
+router.get("/:topicId/references", isLoggedIn, topicController.showReferences);
+
+// ===============================
+// Update Importance
+// ===============================
+router.post("/:topicId/importance", isLoggedIn, topicController.updateImportance);
+
+// ===============================
+// Update Teacher Comments
+// ===============================
+router.post("/:topicId/comments", isLoggedIn, topicController.updateComments);
+
+// ===============================
+// Generate Summary
+// ===============================
+router.post("/:topicId/summarize", isLoggedIn, topicController.generateSummary);
+
+// ===============================
+// Email Summary
+// ===============================
+router.post("/:topicId/email-summary", isLoggedIn, topicController.emailSummary);
 
 module.exports = router;

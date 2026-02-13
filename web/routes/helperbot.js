@@ -7,4 +7,7 @@ router.get("/", isLoggedIn, helperbotController.showBot);
 router.post("/ask", isLoggedIn, helperbotController.askQuestion);
 router.post("/email", isLoggedIn, helperbotController.sendEmail);
 
+// ✅ Clear Chat
+router.post("/clear", isLoggedIn, helperbotController.clearChat);
+
 module.exports = router;

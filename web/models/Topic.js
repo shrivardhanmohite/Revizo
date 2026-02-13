@@ -4,13 +4,13 @@ const topicSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-   required: true 
+    required: true
   },
 
   subjectId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Subject",
-    default:null
+    default: null
   },
 
   noteId: {
@@ -29,7 +29,7 @@ const topicSchema = new mongoose.Schema({
     default: "IMP"
   },
 
-  teacherComment: {
+  teacherComments: {
     type: String,
     default: ""
   },
@@ -42,32 +42,30 @@ const topicSchema = new mongoose.Schema({
   summary: {
     type: String,
     default: ""
-  },summaryMode: {
-  type: String,
-  enum: ["exam", "daily"],
-  default: "exam"
-},
-importance: {
-  type: String,
-  enum: ["IMP", "M-IMP", "V-IMP", "VV-IMP"],
-  default: "IMP"
-},
-teacherComments: {
-  type: String,
-  default: ""
-},
-studyStage: {
-  type: String,
-  enum: [
-    "started",
-    "basics",
-    "practice",
-    "revision",
-    "ready"
-  ],
-  default: "started"
-}
+  },
 
+  summaryMode: {
+    type: String,
+    enum: ["exam", "daily"],
+    default: "exam"
+  },
+
+  studyStage: {
+    type: String,
+    enum: ["started", "basics", "practice", "revision", "ready"],
+    default: "started"
+  },
+
+  pdfPath: {
+    type: String,
+    default: ""
+  },
+
+  // 🔥 NEW FIELD
+  isReferenceOnly: {
+    type: Boolean,
+    default: false
+  }
 
 }, { timestamps: true });
 

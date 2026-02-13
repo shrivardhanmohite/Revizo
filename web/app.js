@@ -10,7 +10,10 @@ const app = express();
 // =====================
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// Static folders
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // ✅ NEW
 
 const session = require("express-session");
 app.use(session({
@@ -28,7 +31,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // =====================
-// Make user available in all views
+// Make user available globally
 // =====================
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
@@ -48,19 +51,10 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error("❌ MongoDB error:", err));
 
 // =====================
-// Feature Routes
+// Routes
 // =====================
-
-// Upload handler (POST only – UI is in index.ejs)
 app.use("/upload", require("./routes/upload"));
-
-// Notes routes (PDF processing + topic saving)
 app.use("/notes", require("./routes/note"));
-
-app.get("/features", (req, res) => {
-  res.render("features");
-});
-
 app.use("/topics", require("./routes/topic"));
 app.use("/helperbot", require("./routes/helperbot"));
 app.use("/mock-paper", require("./routes/mockPaper"));
@@ -69,32 +63,23 @@ app.use("/analytics", require("./routes/analytics"));
 app.use("/", require("./routes/auth"));
 app.use("/", require("./routes/calendar"));
 
-// =====================
-// ROOT → LANDING (PUBLIC)
-// =====================
-app.get("/", (req, res) => {
-  res.render("dashboard"); // landing page
+app.get("/features", (req, res) => {
+  res.render("features");
 });
 
-// =====================
-// HOW IT WORKS PAGE
-// =====================
+app.get("/", (req, res) => {
+  res.render("dashboard");
+});
+
 app.get("/howitworks", (req, res) => {
   res.render("howitworks");
 });
 
-// =====================
-// MAIN APP → SMART NOTES
-// =====================
 app.get("/index", (req, res) => {
-  if (!req.session.user) {
-    return res.redirect("/login");
-  }
-
-  res.render("index"); // LLM Smart Notes UI
+  if (!req.session.user) return res.redirect("/login");
+  res.render("index");
 });
 
-// Optional alias
 app.get("/dashboard", (req, res) => {
   res.redirect("/");
 });

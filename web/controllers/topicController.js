@@ -1,183 +1,153 @@
 const Topic = require("../models/Topic");
-const Note = require("../models/Note");
 const axios = require("axios");
-const path = require("path");
-const fs = require("fs");
-const PDFDocument = require("pdfkit");
-const { sendEmailWithAttachment } = require("../utils/emailSender");
 
 // ===============================
-// Show single topic
+// Show Single Topic
 // ===============================
 exports.showTopic = async (req, res) => {
   try {
-    const { topicId } = req.params;
+
+    if (!req.session.user) {
+      return res.redirect("/login");
+    }
+
+    const topicId = req.params.topicId;
+
+    if (!topicId) {
+      return res.status(400).send("Invalid topic ID");
+    }
 
     const topic = await Topic.findOne({
       _id: topicId,
       userId: req.session.user._id
     });
 
-    if (!topic) return res.status(404).send("Topic not found");
+    if (!topic) {
+      return res.status(404).send("Topic not found");
+    }
 
     res.render("topic", { topic });
+
   } catch (err) {
-    console.error(err);
+    console.error("❌ showTopic error:", err);
     res.status(500).send("Failed to load topic");
   }
 };
 
-// ===============================
-// Generate AI summary
-// ===============================
-exports.generateSummary = async (req, res) => {
-  try {
-    const { topicId } = req.params;
-    const studyMode = req.body.studyMode || "exam";
-
-    const topic = await Topic.findOne({
-      _id: topicId,
-      userId: req.session.user._id
-    });
-
-    if (!topic) return res.status(404).send("Topic not found");
-
-    const response = await axios.post("http://127.0.0.1:8000/summarize", {
-      text: topic.content,
-      mode: studyMode
-    });
-
-    topic.summary = response.data.summary;
-    topic.summaryMode = studyMode;
-    await topic.save();
-
-    res.redirect(`/topics/${topicId}`);
-  } catch (err) {
-    console.error("Summarization error:", err);
-    res.status(500).send("Summarization failed");
-  }
-};
 
 // ===============================
-// Show reference PDFs
+// Show References Page
 // ===============================
 exports.showReferences = async (req, res) => {
   try {
-    const { topicId } = req.params;
 
     const topic = await Topic.findOne({
-      _id: topicId,
+      _id: req.params.topicId,
       userId: req.session.user._id
     });
 
-    if (!topic) return res.status(404).send("Topic not found");
+    if (!topic) {
+      return res.status(404).send("Topic not found");
+    }
 
-    const references = await Note.find({
-      isTextual: false,
-      topicTag: topic.title
-    }).sort({ createdAt: -1 });
+    res.render("referencePages", { topic });
 
-    res.render("referencePages", { topic, references });
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Failed to load reference pages");
+    console.error("❌ showReferences error:", err);
+    res.status(500).send("Failed to load references");
   }
 };
 
+
 // ===============================
-// Update importance
+// Update Importance
 // ===============================
 exports.updateImportance = async (req, res) => {
   try {
-    const { topicId } = req.params;
-    const { importance } = req.body;
 
-    const topic = await Topic.findOne({
-      _id: topicId,
-      userId: req.session.user._id
+    await Topic.findByIdAndUpdate(req.params.topicId, {
+      importance: req.body.importance
     });
 
-    if (!topic) return res.status(404).send("Topic not found");
+    res.redirect(`/topics/${req.params.topicId}`);
 
-    topic.importance = importance;
-    await topic.save();
-
-    res.redirect(`/topics/${topicId}`);
   } catch (err) {
-    console.error(err);
+    console.error("❌ updateImportance error:", err);
     res.status(500).send("Failed to update importance");
   }
 };
 
+
 // ===============================
-// Update teacher comments
+// Update Teacher Comments
 // ===============================
 exports.updateComments = async (req, res) => {
   try {
-    const { topicId } = req.params;
-    const { teacherComments } = req.body;
 
-    const topic = await Topic.findOne({
-      _id: topicId,
-      userId: req.session.user._id
+    await Topic.findByIdAndUpdate(req.params.topicId, {
+      teacherComments: req.body.teacherComments
     });
 
-    if (!topic) return res.status(404).send("Topic not found");
+    res.redirect(`/topics/${req.params.topicId}`);
 
-    topic.teacherComments = teacherComments;
-    await topic.save();
-
-    res.redirect(`/topics/${topicId}`);
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Failed to save comments");
+    console.error("❌ updateComments error:", err);
+    res.status(500).send("Failed to update comments");
   }
 };
 
+
 // ===============================
-// Email summary
+// Generate AI Summary
+// ===============================
+exports.generateSummary = async (req, res) => {
+  try {
+
+    const topic = await Topic.findById(req.params.topicId);
+
+    if (!topic) {
+      return res.status(404).send("Topic not found");
+    }
+
+    const response = await axios.post(
+      "http://127.0.0.1:8000/summarize",
+      {
+        text: topic.content,
+        mode: req.body.studyMode
+      }
+    );
+
+    topic.summary = response.data.summary;
+    topic.summaryMode = req.body.studyMode;
+    await topic.save();
+
+    res.redirect(`/topics/${req.params.topicId}`);
+
+  } catch (err) {
+    console.error("❌ generateSummary error:", err);
+    res.status(500).send("Failed to generate summary");
+  }
+};
+
+
+// ===============================
+// Email Summary
 // ===============================
 exports.emailSummary = async (req, res) => {
   try {
-    const { topicId } = req.params;
-    const { email } = req.body;
 
-    const topic = await Topic.findOne({
-      _id: topicId,
-      userId: req.session.user._id
-    });
+    const topic = await Topic.findById(req.params.topicId);
 
-    if (!topic || !topic.summary) {
-      return res.status(400).send("Summary not available");
+    if (!topic) {
+      return res.status(404).send("Topic not found");
     }
 
-    const filePath = path.join(
-      __dirname,
-      `../temp/${topic.title.replace(/\s+/g, "_")}_summary.pdf`
-    );
+    // If you already implemented Gmail link method in EJS,
+    // this function may not even be needed anymore.
+    res.redirect(`/topics/${req.params.topicId}`);
 
-    const doc = new PDFDocument();
-    doc.pipe(fs.createWriteStream(filePath));
-    doc.fontSize(18).text("EduAI – Topic Summary", { underline: true });
-    doc.moveDown();
-    doc.fontSize(14).text(`Topic: ${topic.title}`);
-    doc.moveDown();
-    doc.fontSize(12).text(`Study Mode: ${topic.summaryMode || "exam"}`);
-    doc.moveDown();
-    doc.fontSize(12).text(topic.summary);
-    doc.end();
-
-    await sendEmailWithAttachment({
-      to: email,
-      subject: `EduAI Summary – ${topic.title}`,
-      text: "Attached is your AI-generated topic summary for revision.",
-      attachmentPath: filePath,
-      attachmentName: "topic-summary.pdf"
-    });
-
-    res.send("Summary emailed successfully ✅");
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Failed to send summary email");
+    console.error("❌ emailSummary error:", err);
+    res.status(500).send("Failed to send summary");
   }
 };

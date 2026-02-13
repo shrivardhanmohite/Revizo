@@ -42,15 +42,11 @@ exports.askQuestion = async (req, res) => {
       content: question
     });
 
-    console.log("📩 Sending question to ML service...");
-
     const response = await axios.post(
       "http://127.0.0.1:8000/helperbot",
       { question },
       { timeout: 120000 }
     );
-
-    console.log("✅ ML service responded");
 
     // Add assistant response
     req.session.chatHistory.push({
@@ -64,7 +60,6 @@ exports.askQuestion = async (req, res) => {
     });
 
   } catch (err) {
-
     console.error("❌ Chat error:", err.message);
 
     res.render("helperbot", {
@@ -143,4 +138,12 @@ exports.sendEmail = async (req, res) => {
       error: "Failed to send email."
     });
   }
+};
+
+// ===============================
+// Clear Chat
+// ===============================
+exports.clearChat = (req, res) => {
+  req.session.chatHistory = [];
+  res.redirect("/helperbot");
 };

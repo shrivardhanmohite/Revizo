@@ -4,6 +4,7 @@ const multer = require("multer");
 const path = require("path");
 const noteController = require("../controllers/noteController");
 const isLoggedIn = require("../middleware/isLoggedIn");
+
 // =====================
 // Multer config
 // =====================
@@ -30,14 +31,12 @@ const upload = multer({
 // =====================
 // Routes
 // =====================
-// const noteController = require("../controllers/noteController");
 
-router.get("/:noteId/topics", noteController.listTopics);
+// 🔐 Protect all note-related routes
+router.get("/:noteId/topics", isLoggedIn, noteController.listTopics);
 
-// 🔥 THIS is what your form hits
-router.post("/upload", upload.single("pdf"), noteController.processPDF);
+router.post("/upload", isLoggedIn, upload.single("pdf"), noteController.processPDF);
 
-// Store-only route
-router.post("/store-only", noteController.storePdfOnly);
+router.post("/store-only", isLoggedIn, noteController.storePdfOnly);
 
 module.exports = router;
