@@ -61,7 +61,8 @@ app.use("/mock-paper", require("./routes/mockPaper"));
 app.use("/study-planner", require("./routes/studyPlanner"));
 app.use("/analytics", require("./routes/analytics"));
 app.use("/", require("./routes/auth"));
-app.use("/", require("./routes/calendar"));
+app.use("/calendar", require("./routes/calendar"));
+
 
 app.get("/features", (req, res) => {
   res.render("features");

@@ -6,3 +6,4 @@ temp/
 web/temp/
 __pycache__/
 *.pyc
+web/config/

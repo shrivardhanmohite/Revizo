@@ -11,7 +11,22 @@
   <p class="text-muted">
     Plan your preparation smartly and track progress topic-wise.
   </p>
+
+  <!-- Google Status -->
+  <div class="mt-4">
+    <% if (googleConnected) { %>
+      <span class="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-sm">
+        ✅ Google Connected
+      </span>
+    <% } else { %>
+      <a href="/calendar/connect"
+         class="px-4 py-2 rounded-md bg-accent text-white text-sm hover:shadow-glow transition">
+        🔗 Connect Google Calendar
+      </a>
+    <% } %>
+  </div>
 </div>
+
 
 <!-- ===============================
      Exam Date Planner
@@ -52,6 +67,64 @@
 
   </div>
 </div>
+<% if (progressPercent !== null && daysLeft > 0) { %>
+
+<div class="max-w-4xl mx-auto mb-10">
+  <div class="bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
+
+    <h3 class="text-lg font-medium mb-3">
+      ⏳ Exam Countdown Progress
+    </h3>
+
+    <div class="w-full bg-bg rounded-full h-4 overflow-hidden">
+      <div id="progressBar"
+           class="h-4 bg-accent transition-all duration-1000 ease-out"
+           style="width:0%">
+      </div>
+    </div>
+
+    <p class="text-sm text-muted mt-3">
+      <%= Math.round(progressPercent) %>% Timeline Completed
+    </p>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const bar = document.getElementById("progressBar");
+    bar.style.width = "<%= progressPercent %>%";
+  });
+</script>
+
+<% } %>
+<% if (dailySuggestion) { %>
+
+<div class="max-w-4xl mx-auto mb-12">
+  <div class="bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
+
+    <h3 class="text-lg font-medium mb-3">
+      🧠 AI Smart Suggestion for Today
+    </h3>
+
+    <p class="text-white font-medium">
+      📘 <%= dailySuggestion.title %>
+    </p>
+
+    <p class="text-sm text-muted mt-2">
+      Importance: <%= dailySuggestion.importance %>
+    </p>
+
+    <a href="/topics/<%= dailySuggestion._id %>"
+       class="inline-block mt-4 px-4 py-2 rounded-md bg-accent text-white text-sm hover:shadow-glow transition">
+       Open Topic →
+    </a>
+
+  </div>
+</div>
+
+<% } %>
+
 
 <!-- ===============================
      Google Calendar Integration
@@ -150,6 +223,36 @@
     <div class="bg-soft/60 p-4 rounded-lg text-center">Practice<br><strong><%= stats.practice %></strong></div>
     <div class="bg-soft/60 p-4 rounded-lg text-center">Revision<br><strong><%= stats.revision %></strong></div>
     <div class="bg-soft/60 p-4 rounded-lg text-center">Ready<br><strong><%= stats.ready %></strong></div>
+  </div>
+</div>
+<div class="max-w-4xl mx-auto mb-12">
+  <h3 class="text-xl font-medium mb-4">
+    🎯 Overall Completion
+  </h3>
+
+  <div class="flex justify-center">
+    <div class="relative w-40 h-40">
+
+      <svg class="transform -rotate-90" width="160" height="160">
+        <circle cx="80" cy="80" r="70"
+          stroke="#2d2d2d"
+          stroke-width="12"
+          fill="none" />
+
+        <circle cx="80" cy="80" r="70"
+          stroke="#6366f1"
+          stroke-width="12"
+          fill="none"
+          stroke-dasharray="440"
+          stroke-dashoffset="<%= 440 - (440 * completionPercent / 100) %>"
+          stroke-linecap="round" />
+      </svg>
+
+      <div class="absolute inset-0 flex items-center justify-center text-xl font-semibold text-white">
+        <%= completionPercent %>%
+      </div>
+
+    </div>
   </div>
 </div>
 

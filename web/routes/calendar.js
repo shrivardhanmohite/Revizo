@@ -1,12 +1,22 @@
 const express = require("express");
 const router = express.Router();
 const calendarController = require("../controllers/calendarController");
+const isLoggedIn = require("../middleware/isLoggedIn");
 
-router.post("/calendar/exam", calendarController.generateExamCalendar);
+// ===============================
+// Google OAuth
+// ===============================
+router.get("/connect", isLoggedIn, calendarController.connectGoogle);
+router.get("/google/callback", calendarController.oauthCallback);
 
-router.post(
-  "/calendar/study-planner",
-  calendarController.generateStudyPlannerCalendar
-);
+// ===============================
+// Add Exam Event
+// ===============================
+router.post("/exam", isLoggedIn, calendarController.generateExamCalendar);
+
+// ===============================
+// Add Smart Study Planner
+// ===============================
+router.post("/study-planner", isLoggedIn, calendarController.generateStudyPlannerCalendar);
 
 module.exports = router;
