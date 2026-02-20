@@ -1,0 +1,21 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="pyq-wrapper">
+  <div class="pyq-container">
+    <h1 class="pyq-title">📚 Previous Year Questions</h1>
+    <p class="pyq-subtitle">
+      Access department-wise PYQs organized by academic year.
+    </p>
+
+    <div class="pyq-grid">
+      <% departments.forEach(dept => { %>
+        <a href="/pyqs/<%= dept._id %>" class="pyq-card">
+          <div class="card-content">
+            <h3><%= dept.name %></h3>
+            <span>Explore Papers →</span>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+</div>

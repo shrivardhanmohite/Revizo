@@ -13,7 +13,7 @@ app.use(express.json());
 
 // Static folders
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/uploads", express.static(path.join(__dirname, "uploads"))); // ✅ NEW
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const session = require("express-session");
 app.use(session({
@@ -31,14 +31,10 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // =====================
-// Make user available globally
+// Make variables globally available
 // =====================
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
-  next();
-});
-
-app.use((req, res, next) => {
   res.locals.currentPath = req.path;
   next();
 });
@@ -60,10 +56,11 @@ app.use("/helperbot", require("./routes/helperbot"));
 app.use("/mock-paper", require("./routes/mockPaper"));
 app.use("/study-planner", require("./routes/studyPlanner"));
 app.use("/analytics", require("./routes/analytics"));
-app.use("/", require("./routes/auth"));
 app.use("/calendar", require("./routes/calendar"));
+app.use("/pyqs", require("./routes/pyqs"));
+app.use("/", require("./routes/auth"));
 
-
+// Static pages
 app.get("/features", (req, res) => {
   res.render("features");
 });
@@ -83,6 +80,21 @@ app.get("/index", (req, res) => {
 
 app.get("/dashboard", (req, res) => {
   res.redirect("/");
+});
+
+// =====================
+// 404 Handler
+// =====================
+app.use((req, res) => {
+  res.status(404).render("errors/404");
+});
+
+// =====================
+// 500 Handler
+// =====================
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).render("errors/500");
 });
 
 // =====================
