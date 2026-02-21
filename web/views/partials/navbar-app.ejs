@@ -16,45 +16,58 @@
         <div class="hidden md:flex items-center gap-6 text-sm text-muted">
 
           <a href="/dashboard"
-             class="flex items-center gap-2 hover:text-white transition">
+             class="flex items-center gap-2 transition 
+             <%= currentPath === '/' || currentPath === '/dashboard' ? 'text-accent font-medium' : 'hover:text-white' %>">
             <i class="fa-solid fa-house text-xs"></i>
             Dashboard
           </a>
 
           <a href="/study-planner"
-             class="flex items-center gap-2 hover:text-white transition">
+             class="flex items-center gap-2 transition
+             <%= currentPath.includes('/study-planner') ? 'text-accent font-medium' : 'hover:text-white' %>">
             <i class="fa-solid fa-calendar-check text-xs"></i>
             Planner
           </a>
-          <!-- <a href="/pyqs"
-         class="<%= currentPath.includes('/pyqs') ? 'text-indigo-400 font-medium' : 'text-white/70 hover:text-white' %>">
-        PYQs
-      </a> -->
+
           <a href="/pyqs"
-             class="flex items-center gap-2 hover:text-white transition">
-              <i class="fa-solid fa-file-lines"></i>
-            Pyqs
+             class="flex items-center gap-2 transition
+             <%= currentPath.includes('/pyqs') ? 'text-accent font-medium' : 'hover:text-white' %>">
+            <i class="fa-solid fa-file-lines text-xs"></i>
+            PYQs
           </a>
+
           <a href="/mock-paper"
-             class="flex items-center gap-2 hover:text-white transition">
+             class="flex items-center gap-2 transition
+             <%= currentPath.includes('/mock-paper') ? 'text-accent font-medium' : 'hover:text-white' %>">
             <i class="fa-solid fa-file-lines text-xs"></i>
             Mock
           </a>
 
           <a href="/helperbot"
-             class="flex items-center gap-2 hover:text-white transition">
+             class="flex items-center gap-2 transition
+             <%= currentPath.includes('/helperbot') ? 'text-accent font-medium' : 'hover:text-white' %>">
             <i class="fa-solid fa-robot text-xs"></i>
             HelperBot
           </a>
 
           <a href="/analytics"
-             class="flex items-center gap-2 hover:text-white transition">
+             class="flex items-center gap-2 transition
+             <%= currentPath.includes('/analytics') ? 'text-accent font-medium' : 'hover:text-white' %>">
             <i class="fa-solid fa-chart-line text-xs"></i>
             Analytics
           </a>
 
-        </div>
+          <!-- 👑 Admin Link (Only Visible to Admin) -->
+          <% if (user && user.role === "admin") { %>
+            <a href="/admin"
+               class="flex items-center gap-2 transition
+               <%= currentPath.includes('/admin') ? 'text-accent font-medium' : 'hover:text-white' %>">
+              <i class="fa-solid fa-shield-halved text-xs"></i>
+              Admin
+            </a>
+          <% } %>
 
+        </div>
       </div>
 
       <!-- Right Section -->
@@ -82,7 +95,7 @@
         <div class="flex items-center gap-2 text-sm text-muted">
           <i class="fa-regular fa-circle-user text-lg"></i>
           <span class="hidden sm:block">
-            <%= user.name %>
+            <%= user ? user.name : "" %>
           </span>
         </div>
 

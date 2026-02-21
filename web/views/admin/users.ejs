@@ -1,0 +1,77 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="p-10 text-white">
+  <h1 class="text-3xl mb-6">User Management</h1>
+
+  <!-- Search -->
+  <form method="GET" action="/admin/users" class="mb-6 flex gap-2">
+    <input type="text" name="search" value="<%= search %>"
+           placeholder="Search by name or email"
+           class="px-3 py-2 rounded bg-white/10 border border-white/20 text-sm w-64" />
+    <button class="px-4 py-2 bg-accent text-black rounded text-sm">
+      Search
+    </button>
+  </form>
+
+  <div class="overflow-x-auto">
+    <table class="w-full border border-white/10 text-sm">
+      <thead class="bg-white/10">
+        <tr>
+          <th class="p-3 text-left">Name</th>
+          <th class="p-3 text-left">Email</th>
+          <th class="p-3 text-left">Department</th>
+          <th class="p-3 text-left">Year</th>
+          <th class="p-3 text-left">Role</th>
+          <th class="p-3 text-left">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% users.forEach(userItem => { %>
+          <tr class="border-t border-white/10 hover:bg-white/5">
+
+            <td class="p-3"><%= userItem.name %></td>
+            <td class="p-3"><%= userItem.email %></td>
+            <td class="p-3"><%= userItem.department || "-" %></td>
+            <td class="p-3"><%= userItem.year || "-" %></td>
+
+            <td class="p-3">
+              <%= userItem.role === "admin" ? "Admin" : "Student" %>
+            </td>
+
+            <td class="p-3 flex gap-2">
+
+              <% if (userItem.role === "student") { %>
+                <form method="POST" action="/admin/users/<%= userItem._id %>/promote">
+                  <button class="px-3 py-1 text-xs bg-green-600 rounded">Promote</button>
+                </form>
+              <% } else { %>
+                <form method="POST" action="/admin/users/<%= userItem._id %>/demote">
+                  <button class="px-3 py-1 text-xs bg-yellow-600 rounded">Demote</button>
+                </form>
+              <% } %>
+
+              <form method="POST" action="/admin/users/<%= userItem._id %>/delete"
+                    onsubmit="return confirm('Delete this user?');">
+                <button class="px-3 py-1 text-xs bg-red-600 rounded">Delete</button>
+              </form>
+
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="mt-6 flex gap-2">
+    <% for(let i = 1; i <= totalPages; i++) { %>
+      <a href="/admin/users?page=<%= i %>&search=<%= search %>"
+         class="px-3 py-1 border border-white/20 rounded 
+         <%= i === currentPage ? 'bg-accent text-black' : '' %>">
+        <%= i %>
+      </a>
+    <% } %>
+  </div>
+
+</div>

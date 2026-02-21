@@ -6,7 +6,6 @@ const bcrypt = require("bcrypt");
 ================================ */
 
 exports.renderSignup = (req, res) => {
-  // Store redirect path if coming from features
   if (req.query.redirect) {
     req.session.redirectAfterLogin = req.query.redirect;
   }
@@ -15,7 +14,6 @@ exports.renderSignup = (req, res) => {
 };
 
 exports.renderLogin = (req, res) => {
-  // Store redirect path if coming from features
   if (req.query.redirect) {
     req.session.redirectAfterLogin = req.query.redirect;
   }
@@ -32,7 +30,7 @@ exports.signup = async (req, res) => {
     let { name, email, password, department, year } = req.body;
 
     name = name?.trim();
-    email = email?.trim();
+    email = email?.trim().toLowerCase();
 
     if (!name || !email || !password) {
       return res.render("auth/signup", { error: "All fields are required" });
@@ -47,14 +45,31 @@ exports.signup = async (req, res) => {
       return res.render("auth/signup", { error: "Email already exists" });
     }
 
-    const user = await User.create({ name, email, password, department, year });
+    const user = await User.create({
+      name,
+      email,
+      password,
+      department,
+      year
+    });
 
-    req.session.user = user;
+    // ✅ Store minimal session data
+    req.session.user = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role
+    };
 
-    // 🔥 Redirect logic (minimal tweak)
-    const redirectUrl = req.session.redirectAfterLogin || "/index";
+    // 👑 Admin auto-redirect
+    let redirectUrl;
+    if (user.role === "admin") {
+      redirectUrl = "/admin";
+    } else {
+      redirectUrl = req.session.redirectAfterLogin || "/index";
+    }
+
     delete req.session.redirectAfterLogin;
-
     res.redirect(redirectUrl);
 
   } catch (err) {
@@ -69,7 +84,9 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+
+    email = email?.trim().toLowerCase();
 
     const user = await User.findOne({ email });
 
@@ -77,12 +94,23 @@ exports.login = async (req, res) => {
       return res.render("auth/login", { error: "Invalid credentials" });
     }
 
-    req.session.user = user;
+    // ✅ Store minimal session data
+    req.session.user = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role
+    };
 
-    // 🔥 Redirect logic (minimal tweak)
-    const redirectUrl = req.session.redirectAfterLogin || "/index";
+    // 👑 Admin auto-redirect
+    let redirectUrl;
+    if (user.role === "admin") {
+      redirectUrl = "/admin";
+    } else {
+      redirectUrl = req.session.redirectAfterLogin || "/index";
+    }
+
     delete req.session.redirectAfterLogin;
-
     res.redirect(redirectUrl);
 
   } catch (err) {

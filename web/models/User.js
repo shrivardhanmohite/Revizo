@@ -10,12 +10,20 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    lowercase: true
   },
 
   password: {
     type: String,
     required: true
+  },
+
+  // 👑 NEW ROLE FIELD
+  role: {
+    type: String,
+    enum: ["student", "admin"],
+    default: "student"
   },
 
   department: String,
@@ -34,11 +42,16 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
-// 🔐 HASH PASSWORD BEFORE SAVE (MONGOOSE 7+ SAFE)
+// 🔐 HASH PASSWORD BEFORE SAVE
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
-
   this.password = await bcrypt.hash(this.password, 12);
 });
+
+
+// 🔑 OPTIONAL: Password Compare Helper (Recommended)
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 module.exports = mongoose.model("User", userSchema);

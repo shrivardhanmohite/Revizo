@@ -59,7 +59,7 @@ app.use("/analytics", require("./routes/analytics"));
 app.use("/calendar", require("./routes/calendar"));
 app.use("/pyqs", require("./routes/pyqs"));
 app.use("/", require("./routes/auth"));
-
+app.use("/admin", require("./routes/admin"));
 // Static pages
 app.get("/features", (req, res) => {
   res.render("features");
