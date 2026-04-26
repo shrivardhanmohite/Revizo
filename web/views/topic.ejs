@@ -19,37 +19,34 @@
   <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
 
     <!-- Importance -->
-    <div class="bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
+    <div class="bg-soft/60 border border-white/10 rounded-xl p-6">
       <h3 class="text-lg font-medium mb-3">⭐ Mark Importance</h3>
 
-      <form action="/topics/<%= topic._id %>/importance" method="POST" class="space-y-4">
+      <form action="/topics/<%= topic._id %>/importance" method="POST">
         <select name="importance"
-          class="w-full bg-bg border border-white/10 rounded-md px-4 py-2 text-gray-200">
+          class="w-full bg-bg border border-white/10 rounded-md px-4 py-2 text-gray-200 mb-3">
           <option value="IMP" <%= topic.importance === "IMP" ? "selected" : "" %>>IMP</option>
           <option value="M-IMP" <%= topic.importance === "M-IMP" ? "selected" : "" %>>M-IMP</option>
           <option value="V-IMP" <%= topic.importance === "V-IMP" ? "selected" : "" %>>V-IMP</option>
           <option value="VV-IMP" <%= topic.importance === "VV-IMP" ? "selected" : "" %>>VV-IMP</option>
         </select>
 
-        <button type="submit"
-          class="px-5 py-2 rounded-md bg-accent text-white text-sm hover:shadow-glow transition">
-          Save Importance
+        <button class="px-4 py-2 bg-accent text-white rounded-md text-sm">
+          Save
         </button>
       </form>
     </div>
 
     <!-- Teacher Comments -->
-    <div class="bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
-      <h3 class="text-lg font-medium mb-3">🧑‍🏫 Teacher’s Comments</h3>
+    <div class="bg-soft/60 border border-white/10 rounded-xl p-6">
+      <h3 class="text-lg font-medium mb-3">🧑‍🏫 Teacher Comments</h3>
 
-      <form action="/topics/<%= topic._id %>/comments" method="POST" class="space-y-4">
-        <textarea name="teacherComments"
-          rows="6"
-          class="w-full bg-bg border border-white/10 rounded-md px-4 py-2 text-gray-200 resize-none"><%= topic.teacherComments %></textarea>
+      <form action="/topics/<%= topic._id %>/comments" method="POST">
+        <textarea name="teacherComments" rows="5"
+          class="w-full bg-bg border border-white/10 rounded-md px-4 py-2 text-gray-200 mb-3"><%= topic.teacherComments %></textarea>
 
-        <button type="submit"
-          class="px-5 py-2 rounded-md bg-accent text-white text-sm hover:shadow-glow transition">
-          Save Comments
+        <button class="px-4 py-2 bg-accent text-white rounded-md text-sm">
+          Save
         </button>
       </form>
     </div>
@@ -62,7 +59,7 @@
 =============================== -->
 <% if (topic.content) { %>
 <div class="flex justify-center mb-10">
-  <div class="w-full max-w-4xl bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
+  <div class="w-full max-w-4xl bg-soft/60 border border-white/10 rounded-xl p-6">
     <h3 class="text-lg font-medium mb-3">📄 Original Content</h3>
     <p class="text-gray-200 whitespace-pre-line">
       <%= topic.content %>
@@ -76,7 +73,7 @@
 =============================== -->
 <% if (topic.pdfPath) { %>
 <div class="flex justify-center mb-10">
-  <div class="w-full max-w-4xl bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
+  <div class="w-full max-w-4xl bg-soft/60 border border-white/10 rounded-xl p-6">
     <h3 class="text-lg font-medium mb-4">📎 Uploaded PDF</h3>
 
     <iframe 
@@ -88,63 +85,115 @@
 <% } %>
 
 <!-- ===============================
-     AI Summarization (ONLY for text PDFs)
+     AI SUMMARY
 =============================== -->
-<% if (!topic.isReferenceOnly) { %>
-
 <div class="flex justify-center mb-10">
-  <div class="w-full max-w-4xl bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6">
+  <div class="w-full max-w-4xl bg-soft/60 border border-white/10 rounded-xl p-6">
 
     <h3 class="text-lg font-medium mb-4">🧠 AI Summary</h3>
 
     <form action="/topics/<%= topic._id %>/summarize" method="POST"
-      class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+      class="flex gap-4 mb-4 flex-wrap">
 
-      <label class="flex items-center gap-2 text-sm">
+      <label>
         <input type="radio" name="studyMode" value="exam"
-          <%= topic.summaryMode !== "daily" ? "checked" : "" %>>
-        Examination
+          <%= topic.summaryMode !== "daily" ? "checked" : "" %>> Exam
       </label>
 
-      <label class="flex items-center gap-2 text-sm">
+      <label>
         <input type="radio" name="studyMode" value="daily"
-          <%= topic.summaryMode === "daily" ? "checked" : "" %>>
-        Daily Study
+          <%= topic.summaryMode === "daily" ? "checked" : "" %>> Daily
       </label>
 
-      <button type="submit"
-        class="px-5 py-2 rounded-md bg-accent text-white text-sm hover:shadow-glow transition">
-        Generate AI Summary
+      <button class="px-4 py-2 bg-accent text-white rounded-md text-sm">
+        Generate
       </button>
     </form>
 
     <% if (topic.summary) { %>
-    <div class="mt-6 border-t border-white/10 pt-6">
-      <h4 class="font-medium mb-2">
-        📌 AI Summary (<%= topic.summaryMode %>)
-      </h4>
 
-      <pre class="whitespace-pre-wrap text-gray-200 text-sm leading-relaxed">
+      <pre class="text-sm text-gray-200 whitespace-pre-wrap">
 <%= topic.summary %>
       </pre>
-    </div>
+
+      <!-- 🔥 CLEAN EMAIL FORMAT -->
+      <%
+      const cleanSummary = topic.summary
+        .replace(/\*\*/g, "")
+        .replace(/\*/g, "•")
+        .replace(/#/g, "")
+        .replace(/`/g, "")
+        .replace(/\n{3,}/g, "\n\n");
+      %>
+
+      <!-- ACTIONS -->
+      <div class="mt-4 flex gap-3 flex-wrap">
+
+        <a href="/topics/<%= topic._id %>/export"
+          class="px-4 py-2 border border-white/10 rounded-md text-sm hover:border-accent hover:text-accent transition">
+          📥 Export CSV
+        </a>
+
+        <a href="https://mail.google.com/mail/?view=cm
+&to=<%= user.email %>
+&su=<%= encodeURIComponent('Revizo Summary - ' + topic.title) %>
+&body=<%= encodeURIComponent(
+`📘 REVIZO SUMMARY
+
+📝 Topic: ${topic.title}
+
+━━━━━━━━━━━━━━━━━━━━
+
+${cleanSummary}
+
+━━━━━━━━━━━━━━━━━━━━
+
+Generated using Revizo AI 🚀`
+) %>"
+          target="_blank"
+          class="px-4 py-2 border border-white/10 rounded-md text-sm hover:border-accent hover:text-accent transition">
+          📧 Share via Gmail
+        </a>
+
+      </div>
+
     <% } %>
 
   </div>
 </div>
 
-<% } else { %>
-
-<!-- Reference Only Message -->
+<!-- ===============================
+     SUMMARY HISTORY
+=============================== -->
+<% if (topic.summaryHistory && topic.summaryHistory.length > 0) { %>
 <div class="flex justify-center mb-10">
-  <div class="w-full max-w-4xl bg-soft/60 backdrop-blur border border-white/10 rounded-xl p-6 text-center text-muted">
-    📚 This is a reference-only PDF.
-    You can mark importance and add teacher comments for revision.
+  <div class="w-full max-w-4xl bg-soft/60 border border-white/10 rounded-xl p-6">
+
+    <h3 class="text-lg font-medium mb-4">📜 Summary History</h3>
+
+    <% topic.summaryHistory.slice().reverse().forEach(item => { %>
+
+      <div class="border border-white/10 rounded-md p-4 mb-3">
+
+        <div class="flex justify-between text-xs text-gray-400 mb-2">
+          <span>
+            <%= item.mode === "openrouter-vision" ? "Vision AI" : item.mode %>
+          </span>
+          <span><%= new Date(item.createdAt).toLocaleString() %></span>
+        </div>
+
+        <p class="text-sm text-gray-300">
+          <%= item.content %>
+        </p>
+
+      </div>
+
+    <% }) %>
+
   </div>
 </div>
-
 <% } %>
 
-<a href="/" class="text-sm text-muted hover:text-accent transition">
-  ⬅ Back to Home
+<a href="/notes" class="text-sm text-muted hover:text-accent transition">
+  ⬅ Back to Notes
 </a>

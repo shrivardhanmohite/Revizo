@@ -6,32 +6,75 @@
   </h2>
 
   <p class="text-muted">
-    Generate exam-style mock question papers based on high-importance topics.
+    Generate exam-style mock question papers using your notes or important topics.
   </p>
 </div>
 
+<!-- ===============================
+     FORM PANEL
+=============================== -->
 <div class="flex justify-center mb-10">
-  <div class="form-panel w-full max-w-xl text-center">
+  <div class="form-panel w-full max-w-xl text-left">
 
-    <form action="/mock-paper/generate" method="POST">
-      <button type="submit" class="form-button text-white">
+    <form action="/mock-paper/generate" method="POST" class="space-y-5">
+
+      <!-- 🔥 PDF SELECTION -->
+      <div class="form-section">
+        <label class="form-label">Select PDF (Optional)</label>
+
+        <select name="noteId" class="form-input">
+          <option value="">-- Use Important Topics Instead --</option>
+
+          <% if (notes && notes.length > 0) { %>
+            <% notes.forEach(note => { %>
+              <option value="<%= note._id %>">
+                <%= note.originalFileName %>
+              </option>
+            <% }) %>
+          <% } else { %>
+            <option disabled>No PDFs available</option>
+          <% } %>
+        </select>
+
+        <p class="text-xs text-muted mt-1">
+          Leave blank to generate from high-importance topics
+        </p>
+      </div>
+
+      <!-- 🔥 GENERATE BUTTON -->
+      <button type="submit" class="form-button text-white w-full">
         Generate Mock Paper
       </button>
+
     </form>
 
   </div>
 </div>
 
+<!-- ===============================
+     RESULT
+=============================== -->
 <% if (paper) { %>
   <div class="flex justify-center mb-10">
     <div class="form-panel w-full max-w-3xl">
-      <h3 class="text-xl font-medium mb-4">
-        Generated Question Paper
-      </h3>
 
-      <div class="mt-2 p-5 rounded-xl bg-bg/40 border border-white/5 text-sm leading-relaxed whitespace-pre-wrap text-gray-200">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-medium">
+          📄 Generated Question Paper
+        </h3>
+
+        <!-- 🔥 COPY BUTTON -->
+        <button onclick="copyPaper()"
+          class="text-xs px-3 py-1 border border-white/10 rounded-md hover:border-accent hover:text-accent transition">
+          Copy
+        </button>
+      </div>
+
+      <div id="mockPaperContent"
+        class="mt-2 p-5 rounded-xl bg-bg/40 border border-white/5 text-sm leading-relaxed whitespace-pre-wrap text-gray-200">
         <%= paper %>
       </div>
+
     </div>
   </div>
 <% } %>
@@ -39,3 +82,14 @@
 <a href="/" class="inline-block text-sm text-muted hover:text-accent transition">
   ⬅ Back to Home
 </a>
+
+<!-- ===============================
+     SCRIPT
+=============================== -->
+<script>
+function copyPaper() {
+  const text = document.getElementById("mockPaperContent").innerText;
+  navigator.clipboard.writeText(text);
+  alert("Copied to clipboard!");
+}
+</script>

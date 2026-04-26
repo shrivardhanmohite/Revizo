@@ -13,55 +13,85 @@
         </a>
 
         <!-- Navigation Links -->
-        <div class="hidden md:flex items-center gap-6 text-sm text-muted">
+        <div class="hidden md:flex items-center gap-3 text-sm text-muted">
 
+          <!-- Dashboard -->
           <a href="/dashboard"
-             class="flex items-center gap-2 transition 
-             <%= currentPath === '/' || currentPath === '/dashboard' ? 'text-accent font-medium' : 'hover:text-white' %>">
+             class="flex items-center gap-2 px-3 py-2 rounded-md transition 
+             <%= currentPath === '/' || currentPath === '/dashboard' 
+             ? 'text-accent font-medium bg-white/10' 
+             : 'hover:text-white hover:bg-white/5' %>">
             <i class="fa-solid fa-house text-xs"></i>
             Dashboard
           </a>
 
+          <!-- My Notes -->
+          <a href="/notes"
+             class="flex items-center gap-2 px-3 py-2 rounded-md transition
+             <%= currentPath.includes('/notes') 
+             ? 'text-accent font-medium bg-white/10' 
+             : 'hover:text-white hover:bg-white/5' %>">
+            <i class="fa-solid fa-book-open text-xs"></i>
+            My Notes
+          </a>
+
+          <!-- Planner -->
           <a href="/study-planner"
-             class="flex items-center gap-2 transition
-             <%= currentPath.includes('/study-planner') ? 'text-accent font-medium' : 'hover:text-white' %>">
+             class="flex items-center gap-2 px-3 py-2 rounded-md transition
+             <%= currentPath.includes('/study-planner') 
+             ? 'text-accent font-medium bg-white/10' 
+             : 'hover:text-white hover:bg-white/5' %>">
             <i class="fa-solid fa-calendar-check text-xs"></i>
             Planner
           </a>
 
+          <!-- PYQs -->
           <a href="/pyqs"
-             class="flex items-center gap-2 transition
-             <%= currentPath.includes('/pyqs') ? 'text-accent font-medium' : 'hover:text-white' %>">
+             class="flex items-center gap-2 px-3 py-2 rounded-md transition
+             <%= currentPath.includes('/pyqs') 
+             ? 'text-accent font-medium bg-white/10' 
+             : 'hover:text-white hover:bg-white/5' %>">
             <i class="fa-solid fa-file-lines text-xs"></i>
             PYQs
           </a>
 
+          <!-- Mock -->
           <a href="/mock-paper"
-             class="flex items-center gap-2 transition
-             <%= currentPath.includes('/mock-paper') ? 'text-accent font-medium' : 'hover:text-white' %>">
+             class="flex items-center gap-2 px-3 py-2 rounded-md transition
+             <%= currentPath.includes('/mock-paper') 
+             ? 'text-accent font-medium bg-white/10' 
+             : 'hover:text-white hover:bg-white/5' %>">
             <i class="fa-solid fa-file-lines text-xs"></i>
             Mock
           </a>
 
+          <!-- HelperBot -->
           <a href="/helperbot"
-             class="flex items-center gap-2 transition
-             <%= currentPath.includes('/helperbot') ? 'text-accent font-medium' : 'hover:text-white' %>">
+             class="flex items-center gap-2 px-3 py-2 rounded-md transition
+             <%= currentPath.includes('/helperbot') 
+             ? 'text-accent font-medium bg-white/10' 
+             : 'hover:text-white hover:bg-white/5' %>">
             <i class="fa-solid fa-robot text-xs"></i>
             HelperBot
           </a>
 
+          <!-- Analytics -->
           <a href="/analytics"
-             class="flex items-center gap-2 transition
-             <%= currentPath.includes('/analytics') ? 'text-accent font-medium' : 'hover:text-white' %>">
+             class="flex items-center gap-2 px-3 py-2 rounded-md transition
+             <%= currentPath.includes('/analytics') 
+             ? 'text-accent font-medium bg-white/10' 
+             : 'hover:text-white hover:bg-white/5' %>">
             <i class="fa-solid fa-chart-line text-xs"></i>
             Analytics
           </a>
 
-          <!-- 👑 Admin Link (Only Visible to Admin) -->
+          <!-- Admin -->
           <% if (user && user.role === "admin") { %>
             <a href="/admin"
-               class="flex items-center gap-2 transition
-               <%= currentPath.includes('/admin') ? 'text-accent font-medium' : 'hover:text-white' %>">
+               class="flex items-center gap-2 px-3 py-2 rounded-md transition
+               <%= currentPath.includes('/admin') 
+               ? 'text-accent font-medium bg-white/10' 
+               : 'hover:text-white hover:bg-white/5' %>">
               <i class="fa-solid fa-shield-halved text-xs"></i>
               Admin
             </a>
@@ -77,22 +107,22 @@
         <div class="hidden lg:block relative">
           <input type="text"
                  placeholder="Search..."
-                 class="bg-soft border border-white/10
-                        px-3 py-1.5 pl-9 rounded-md text-sm
-                        focus:outline-none focus:border-accent transition" />
+                 class="bg-gray-800 border border-white/10
+                        px-3 py-1.5 pl-9 rounded-md text-sm text-white
+                        focus:outline-none focus:border-indigo-400 transition" />
           <i class="fa-solid fa-magnifying-glass
                     absolute left-3 top-1/2 -translate-y-1/2
-                    text-muted text-xs"></i>
+                    text-gray-400 text-xs"></i>
         </div>
 
         <!-- Notification -->
         <button class="relative p-2 rounded-md hover:bg-white/10 transition">
-          <i class="fa-regular fa-bell text-muted"></i>
+          <i class="fa-regular fa-bell text-gray-400"></i>
           <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
         </button>
 
         <!-- User -->
-        <div class="flex items-center gap-2 text-sm text-muted">
+        <div class="flex items-center gap-2 text-sm text-gray-400">
           <i class="fa-regular fa-circle-user text-lg"></i>
           <span class="hidden sm:block">
             <%= user ? user.name : "" %>
@@ -102,7 +132,7 @@
         <!-- Logout -->
         <a href="/logout"
            class="px-4 py-2 text-sm border border-white/10 rounded-md
-                  hover:border-accent hover:text-accent transition">
+                  hover:border-indigo-400 hover:text-indigo-400 transition">
           Logout
         </a>
 

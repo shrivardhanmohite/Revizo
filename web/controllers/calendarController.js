@@ -146,7 +146,7 @@ exports.generateStudyPlannerCalendar = async (req, res) => {
       });
     }
 
-    res.send("✅ Smart Study Plan added");
+    return res.redirect("/analytics?success=plan_added");
 
   } catch (err) {
     console.error(err);

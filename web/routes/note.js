@@ -10,7 +10,7 @@ const isLoggedIn = require("../middleware/isLoggedIn");
 // =====================
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "web/uploads/");
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -34,6 +34,8 @@ const upload = multer({
 
 // 🔐 Protect all note-related routes
 router.get("/:noteId/topics", isLoggedIn, noteController.listTopics);
+
+router.get("/",noteController.listNotes);
 
 router.post("/upload", isLoggedIn, upload.single("pdf"), noteController.processPDF);
 

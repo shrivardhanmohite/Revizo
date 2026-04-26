@@ -1,5 +1,30 @@
 <% layout("layouts/boilerplate") %>
 
+<!-- ✅ SUCCESS POPUP -->
+<% if (query && query.success === 'plan_added') { %>
+  <div id="successToast"
+       class="fixed top-20 right-6 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in">
+    ✅ Smart Study Plan Added to Google Calendar
+  </div>
+
+  <script>
+    setTimeout(() => {
+      const toast = document.getElementById("successToast");
+      if (toast) toast.style.display = "none";
+    }, 3000);
+  </script>
+<% } %>
+
+<style>
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.animate-slide-in {
+  animation: slideIn 0.4s ease;
+}
+</style>
+
 <h2 class="text-3xl font-semibold mb-8">
   📊 Study <span class="text-accent">Analytics</span>
 </h2>

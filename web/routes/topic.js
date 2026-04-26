@@ -27,7 +27,9 @@ router.post("/:topicId/comments", isLoggedIn, topicController.updateComments);
 // Generate Summary
 // ===============================
 router.post("/:topicId/summarize", isLoggedIn, topicController.generateSummary);
-
+router.get("/:topicId/export", isLoggedIn, topicController.exportSummaryCSV);
+router.post("/:topicId/email-summary", isLoggedIn, topicController.emailSummary);
+router.get("/history/all", isLoggedIn, topicController.showHistory);
 // ===============================
 // Email Summary
 // ===============================

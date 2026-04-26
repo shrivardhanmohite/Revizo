@@ -1,6 +1,18 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import requests
+from pdf2image import convert_from_path
+import base64
+from io import BytesIO
+import os
+from dotenv import load_dotenv
+
+# ===============================
+# LOAD ENV VARIABLES
+# ===============================
+load_dotenv()
+
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 # ===============================
 # External Modules
@@ -22,7 +34,7 @@ def call_ollama(prompt: str):
     url = "http://localhost:11434/api/generate"
 
     payload = {
-        "model": "llama3",   # Make sure this model exists in ollama list
+        "model": "llama3",
         "prompt": prompt,
         "stream": False
     }
@@ -33,6 +45,84 @@ def call_ollama(prompt: str):
         raise Exception(f"Ollama API error: {response.text}")
 
     return response.json().get("response", "No response from model.")
+
+
+# ===============================
+# PDF → BASE64 IMAGES
+# ===============================
+def pdf_to_base64_images(pdf_path):
+    images = convert_from_path(pdf_path, first_page=1, last_page=2)
+
+    base64_images = []
+
+    for img in images:
+        buffered = BytesIO()
+        img.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode()
+        base64_images.append(img_str)
+
+    return base64_images
+
+
+# ===============================
+# OPENROUTER SUMMARIZER
+# ===============================
+def summarize_with_openrouter(base64_images):
+    url = "https://openrouter.ai/api/v1/chat/completions"
+
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    # Multi-image support
+    image_payload = [
+        {
+            "type": "image_url",
+            "image_url": {
+                "url": f"data:image/png;base64,{img}"
+            }
+        }
+        for img in base64_images
+    ]
+
+    messages = [{
+        "role": "user",
+        "content": [
+          {
+  "type": "text",
+  "text": """
+You are an academic assistant.
+
+Analyze the document carefully and generate a detailed, structured summary.
+
+Instructions:
+- Explain concepts clearly
+- Include important points
+- Use bullet points where needed
+- Do not be too short
+- Keep it exam-oriented
+- Avoid skipping technical details
+
+Format:
+1. Topic Overview
+2. Key Concepts
+3. Important Points
+4. Short Conclusion
+"""
+},
+            *image_payload
+        ]
+    }]
+
+    payload = {
+        "model": "openai/gpt-4o-mini",  # ✅ vision-capable model
+        "messages": messages
+    }
+
+    response = requests.post(url, headers=headers, json=payload)
+
+    return response.json()
 
 
 # ===============================
@@ -72,7 +162,7 @@ def segment_text(payload: dict):
 
 
 # ===============================
-# SUMMARIZATION
+# SUMMARIZATION (OLLAMA)
 # ===============================
 @app.post("/summarize")
 def summarize(payload: dict):
@@ -82,6 +172,30 @@ def summarize(payload: dict):
     summary = summarize_text(text, mode)
 
     return {"summary": summary}
+
+
+# ===============================
+# 🔥 NEW: IMAGE PDF SUMMARIZATION (OpenRouter)
+# ===============================
+@app.post("/summarize-image-pdf")
+def summarize_image_pdf(req: PDFRequest):
+    try:
+        images = pdf_to_base64_images(req.pdf_path)
+
+        result = summarize_with_openrouter(images)
+
+        print("OpenRouter FULL Response:", result)  # 🔥 ADD THIS
+
+        summary = result.get("choices", [{}])[0].get("message", {}).get("content", "")
+
+        if not summary:
+            summary = "⚠️ Failed to generate summary from OpenRouter."
+
+        return {"summary": summary}
+
+    except Exception as e:
+        print("❌ OpenRouter Error:", str(e))  # 🔥 IMPORTANT
+        return {"summary": str(e)}  # 👈 return real error
 
 
 # ===============================

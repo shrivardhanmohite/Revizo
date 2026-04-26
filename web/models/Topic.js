@@ -46,9 +46,21 @@ const topicSchema = new mongoose.Schema({
 
   summaryMode: {
     type: String,
-    enum: ["exam", "daily"],
+    enum: ["exam", "daily", "openrouter-vision"],
     default: "exam"
   },
+
+  // 🔥 NEW HISTORY FIELD
+  summaryHistory: [
+    {
+      content: String,
+      mode: String,
+      createdAt: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
 
   studyStage: {
     type: String,
@@ -61,7 +73,6 @@ const topicSchema = new mongoose.Schema({
     default: ""
   },
 
-  // 🔥 NEW FIELD
   isReferenceOnly: {
     type: Boolean,
     default: false

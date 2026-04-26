@@ -1,0 +1,56 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="max-w-5xl mx-auto mt-10">
+
+  <h2 class="text-3xl font-semibold mb-6">
+    📜 Summary <span class="text-accent">History</span>
+  </h2>
+
+  <% if (!history || history.length === 0) { %>
+
+    <div class="bg-soft p-6 rounded-xl text-center text-muted">
+      No summaries generated yet.
+    </div>
+
+  <% } else { %>
+
+    <div class="space-y-4">
+
+      <% history.forEach(item => { %>
+
+        <div class="bg-soft p-5 rounded-xl">
+
+          <!-- Header -->
+          <div class="flex justify-between items-center mb-2">
+
+            <div>
+              <h3 class="text-white font-medium">
+                <%= item.topicTitle %>
+              </h3>
+
+              <p class="text-xs text-muted">
+                <%= item.mode %> • <%= new Date(item.createdAt).toLocaleString() %>
+              </p>
+            </div>
+
+            <a href="/topics/<%= item.topicId %>"
+               class="text-xs text-accent hover:underline">
+              Open →
+            </a>
+
+          </div>
+
+          <!-- Content -->
+          <p class="text-sm text-gray-300 line-clamp-3">
+            <%= item.content %>
+          </p>
+
+        </div>
+
+      <% }) %>
+
+    </div>
+
+  <% } %>
+
+</div>
